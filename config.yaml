@@ -1,0 +1,51 @@
+baseURL: https://blog.bling.moe
+relativeurls: false
+defaultContentLanguage: zh-cn
+enableRobotsTXT: true
+hasCJKLanguage: true
+languageCode: zh-cn
+rssFullText: true
+rssLimit: 10
+title: 星野玲的博客
+theme: hello-friend
+copyright: ''
+paginate: 10
+GoogleAnalytics: G-E6TTBX28QL
+enableGitInfo: true
+
+params:
+  contentTypeName: post
+  defaultTheme: dark
+  showMenuItems: 3
+  showReadingTime: false
+languages:
+  zh-cn:
+    title: 星野玲的博客
+    subtitle: ''
+    keyword: ''
+    menuMore: 查看更多
+    writtenBy: 作者：
+    readMore: 阅读更多
+    readOtherPosts: 阅读其它文章
+    newerPosts: 较新的文章
+    olderPosts: 较旧的文章
+    dateFormatSingle: 2006-01-02
+    dateFormatList: 2006-01-02
+    lastModDisplay: 最后修改于：
+  
+    params:
+      logo:
+        logoText: 星野玲的博客
+        logoHomeLink: /
+
+    menu:
+      main:
+        - identifier: about
+          name: 关于
+          url: /about/
+        - identifier: links
+          name: 友链
+          url: /links/
+        - identifier: RSS
+          name: RSS
+          url: /index.xml

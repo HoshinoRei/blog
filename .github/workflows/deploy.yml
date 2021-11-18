@@ -1,0 +1,31 @@
+name: Deploy
+on:
+  push:
+    branches:  
+      - master
+env:
+  DOMAIN: blog.bling.moe
+jobs:
+  deploy_to_github_pages:
+    name: Deploy to Github Pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: true
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          extended: true
+          hugo-version: 0.111.3
+      - name: Build
+        run: hugo -F --minify
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3  
+        with:
+          cname: ${{ env.DOMAIN }}
+          force_orphan: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
