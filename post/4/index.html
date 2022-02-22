@@ -222,7 +222,7 @@ table inet clash {
     }
 }
 </code></pre></div><p>要代理路由器自身发出的流量时请确保 Clash 发出的流量不经过透明代理，否则会引起回环。这就需要规则里的 gid 设置正确了。</p>
-<p>之所以用 <code>iifname { lo, enp1s0 }</code> 限制入口网卡是为了防止 bridge 网络模式下的 Docker 容器发出的流量走透明代理。如果不加上这个限制会导致bridge 网络模式下的 Docker 容器直接访问不了外网。小玲现在还没有办法让 bridge 网络模式下的 Docker 容器通过 Tproxy 走透明代理。如果你有办法，不妨在评论区告诉小玲。<code>lo</code> 网卡是必须写上去的，如果不写路由器自身发出的流量就不能走代理。<code>enp1s0</code> 请改成你的 LAN 口网卡名称。</p>
+<p>之所以用 <code>iifname { lo, enp1s0 }</code> 限制入口网卡是为了防止 bridge 网络模式下的 Docker 容器发出的流量走透明代理。如果不加上这个限制会导致 bridge 网络模式下的 Docker 容器直接访问不了外网。小玲现在还没有办法让 bridge 网络模式下的 Docker 容器通过 Tproxy 走透明代理。如果你有办法，不妨在评论区告诉小玲。<code>lo</code> 网卡是必须写上去的，如果不写路由器自身发出的流量就不能走代理。<code>enp1s0</code> 请改成你的 LAN 口网卡名称。</p>
 <h2 id=启动-clash>启动 Clash</h2>
 <p>重启 Dnsmasq</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo docker-compose -f ~/docker-compose.yml restart dnsmasq
