@@ -7,12 +7,7 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta name=description content="在这篇文章里，小玲将教你如何将一个装着干净的 Debian 系统的设备变成一个能让局域网内设备上网的软路由。小玲使用一台 Nanopi R4S 作为演示用的设备，刷入的系统为 Armbian 21.08.1，Debian 版本为 11。你也可以用 X86 的设备，设置过程基本上没有区别。
-将 Armbian 系统刷入 TF 卡后，咱们将卡插入 R4S 的 TF 卡槽里，使用一条网线接在原本的路由器的 LAN 口上，然后给 R4S 通电。
-找到 R4S 通过 DHCP 获取的 IP 地址。用默认用户名 root，默认密码 1234 登录 SSH。在完成 Armbian 系统的初始设置后，咱们现在得到了一个干净的 Armbian 系统。下面的步骤都是用在 Armbian 系统的初始设置里创建的非 root 用户操作的。小玲不建议大家直接用 root 用户操作。
-设置密钥 安装完后第一步是要确保路由器安全，因为当设置好后路由器是要暴露在公网上的。有人会扫描 IPv4 的 IP 段，然后再扫描能连通的 IP 地址的端口。如果发现是 SSH 端口，还会爆破。所以咱们要使用密钥文件登录，而且要把密码登录关闭。
-创建存放密钥的文件夹，默认路径是家目录下的 .ssh 文件夹。
-mkdir ~/.ssh 写入密钥。这里密钥请替换成你自己的。
-echo &amp;#39;ssh-rsa &amp;lt;private_key&amp;gt;&amp;#39; &amp;gt;&amp;gt; ~/.ssh/authorized_keys 编辑 sshd 配置文件。">
+">
 <meta name=keywords content>
 <meta name=robots content="noodp">
 <link rel=canonical href=https://blog.bling.moe/post/3/>

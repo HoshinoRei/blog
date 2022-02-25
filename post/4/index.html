@@ -7,11 +7,7 @@ Debian 路由器上使用 Clash 作为透明代理 ::
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta name=description content="安装好了 Debian 路由器之后，咱们是不是有一个应用是几乎玩软路由的人都喜欢的？没错，那就是透明代理。今天小玲就来教大家在安装完 Debian 路由器之后，通过 Clash 和 nftables 实现透明代理。本教程的设置均基于 《使用 Debian 作为路由器》的设置。
-咱们要使用的 Clash 是 Docker 版的。这样安装起来更方便一些。Clash 模式采用 redir-host，因为小玲习惯了 redir-host 模式了，用 fake-ip 模式的话，查网站的 IP 地址会多多少少有一些不方便。
-创建用户组 首先新建一个名为 clash 的用户组，因为之后咱们的 Clash 要不光能代理局域网内其他设备的流量，还要代理自身发出的流量。所以要让 Clash 运行在一个特定的用户组上。
-sudo groupadd -r clash 查看 clash 用户组的 gid。
-cat /etc/group | grep clash 咱们可以看到，小玲创建的 clash 用户组的 gid 是 997。这个数值会根据你的环境的不同而不同，使用时请更改为你自己的 gid。
-clash:x:997: 编写配置文件 首先先把 Clash 的配置文件 config.yaml 准备好，小玲这里准备了一个。注意这里的 DNS 监听端口是 1053。待会咱们需要把 Dnsmasq 的上游 DNS 改为本机的 1053 端口。小玲不建议直接让 Clash 监听 53 端口，因为 Clash 的 hosts 功能没办法给一个域名同时指定 IPv4 和 IPv6 地址。如果你用不到 hosts 功能，让 Clash 直接监听 53 端口也是可以的，这样就可以让 Dnsmasq 不提供 DNS 服务，改由 Clash 提供 DNS 服务了。">
+">
 <meta name=keywords content>
 <meta name=robots content="noodp">
 <link rel=canonical href=https://blog.bling.moe/post/4/>
