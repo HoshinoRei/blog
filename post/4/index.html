@@ -133,7 +133,6 @@ Debian 路由器上使用 Clash 作为透明代理 ::
       - <span style=color:#ae81ff>./config/clash:/root/.config/clash</span>
       - <span style=color:#ae81ff>/etc/group:/etc/group:ro</span>
       - <span style=color:#ae81ff>/etc/passwd:/etc/passwd:ro</span>
-      - <span style=color:#ae81ff>/etc/shadow:/etc/shadow:ro</span>
   <span style=color:#75715e># 这里省略已有的 service</span>
 </code></pre></div><p>这里之所以使用 1.7.1 的 Clash 是因为这个版本之后的 Clash，redir-host 模式不好用了。</p>
 <p>修改 <code>dnsmasq.conf</code> 文件。</p>
