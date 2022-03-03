@@ -10,6 +10,7 @@ title: 星野玲的博客
 theme: hello-friend
 copyright: ''
 paginate: 5
+GoogleAnalytics: G-E6TTBX28QL
 
 params:
   contentTypeName: post
