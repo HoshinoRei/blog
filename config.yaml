@@ -31,6 +31,7 @@ languages:
     olderPosts: Older posts
     dateFormatSingle: 2006-01-02
     dateFormatList: 2006-01-02
+    lastModDisplay: 最后修改于：
   
     params:
       logo:
