@@ -11,6 +11,7 @@ theme: hello-friend
 copyright: ''
 paginate: 5
 GoogleAnalytics: G-E6TTBX28QL
+enableGitInfo: true
 
 params:
   contentTypeName: post
