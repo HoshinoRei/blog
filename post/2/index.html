@@ -28,7 +28,7 @@ Windows 上小狼毫输入法的上手教程 ::
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://blog.bling.moe/post/2/"><meta property="article:section" content="post">
 <meta property="article:published_time" content="2021-10-17T14:58:00+08:00">
-<meta property="article:modified_time" content="2022-03-07T17:00:29+08:00"><meta property="og:site_name" content="星野玲的博客">
+<meta property="article:modified_time" content="2022-03-10T01:02:38+08:00"><meta property="og:site_name" content="星野玲的博客">
 </head><body class=dark-theme>
 <div class=container>
 <header class=header>
@@ -57,7 +57,7 @@ Windows 上小狼毫输入法的上手教程 ::
 </span>
 <span class=post-moddate>
 (最后修改于：
-2022-03-07)
+2022-03-10)
 </span>
 <span class=post-author>— 作者： 星野玲</span>
 </div><span class=post-tags>
@@ -67,7 +67,7 @@ Windows 上小狼毫输入法的上手教程 ::
 <a href=https://blog.bling.moe/tags/%E5%B0%8F%E7%8B%BC%E6%AF%AB/>#小狼毫</a>&nbsp;
 </span>
 <div class=post-content>
-<p>小玲以前在使用 Windows 系统时，一直都是用系统自带的输入法——微软拼音的，而且小玲没有那种安装第三方输入法的习惯。但是有一天，小玲在网上看到好多人推荐的 Rime 输入法，抱着试一下的想法，小玲试用了一下这款输入法。没想到这款输入法的可定制性真的高。小玲从此就离不开这款输入法了。现在小玲也来向大家传教。</p><h2 id=安装>安装</h2><p>在 Windows 上，这款输入法有一个专属的名字——小狼毫（Weasel）。</p><p>小玲是直接采用 [winget]( {{ &lt; ref &ldquo;1.md&rdquo; > }}) 安装的，当然你也可以在 Github <a href=https://github.com/rime/weasel/releases/latest>下载</a> 这款输入法，小狼毫是开源的。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span>winget install --id=Rime.Weasel
+<p>小玲以前在使用 Windows 系统时，一直都是用系统自带的输入法——微软拼音的，而且小玲没有那种安装第三方输入法的习惯。但是有一天，小玲在网上看到好多人推荐的 Rime 输入法，抱着试一下的想法，小玲试用了一下这款输入法。没想到这款输入法的可定制性真的高。小玲从此就离不开这款输入法了。现在小玲也来向大家传教。</p><h2 id=安装>安装</h2><p>在 Windows 上，这款输入法有一个专属的名字——小狼毫（Weasel）。</p><p>小玲是直接采用 <a href=https://blog.bling.moe/post/1/>winget</a> 安装的，当然你也可以在 Github <a href=https://github.com/rime/weasel/releases/latest>下载</a> 这款输入法，小狼毫是开源的。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span>winget install --id=Rime.Weasel
 </span></span></code></pre></div><h2 id=设置用户文件夹>设置用户文件夹</h2><p>安装完成后，小玲强烈建议你把小狼毫的“用户资料夹”改成一个 C 盘以外的位置。这样重装系统后，只需把“用户资料夹”的位置设置为上一次设置的位置，输入法配置就全部回来啦。</p><p>你可以在开始菜单里的“【小狼毫】安装选项”设置位置。</p><h2 id=删除原来的输入法>删除原来的输入法</h2><p>假设你原来原来的中文输入法只有微软拼音。这里以 Windows 10 为例，在你安装好后，系统设置里并没有添加小狼毫这个输入法，你需要在“设置”→“时间和语言”→“语言”→“首选语言”→“中文（简体，中国）”→“选项”→“键盘”里把小狼毫给添加进去，然后就可以把微软拼音删除啦。</p><h2 id=设置输入方案>设置输入方案</h2><p>从现在开始咱们将通过编写配置文件的方式设置小狼毫。虽然小狼毫有一个“输入法设定”的功能。不过那个能设置的东西太少了，小玲也不会教你那么简单的东西。小玲将教你通过编写配置文件的方式设置小狼毫。不过在这之前，你需要熟悉 YAML 文件的语法。</p><p>首先，咱们需要打开小狼毫的“用户文件夹”然后在里面新建一个文件，命名为 <code>default.custom.yaml</code>，然后写入以下内容。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>patch</span>:
 </span></span><span style=display:flex><span>  <span style=color:#f92672>schema_list</span>:
 </span></span><span style=display:flex><span>    - <span style=color:#f92672>schema</span>: <span style=color:#ae81ff>luna_pinyin</span>
