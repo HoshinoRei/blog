@@ -1,7 +1,6 @@
 baseURL: https://blog.bling.moe
 relativeurls: false
 defaultContentLanguage: zh-cn
-disqusShortname: hoshinorei
 enableRobotsTXT: true
 hasCJKLanguage: true
 languageCode: zh-cn
