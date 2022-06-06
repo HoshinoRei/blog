@@ -1,0 +1,197 @@
+<!doctype html><html lang=zh-cn><head><title>Debian 路由器上使用 Clash 作为透明代理 ::
+星野玲的博客</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="安装好了 Debian 路由器之后，咱们是不是有一个应用是几乎玩软路由的人都喜欢的？没错，那就是透明代理。今天小玲就来教大家在安装完 Debian 路由器之后，通过 Clash 和 nftables 实现透明代理。本教程的设置均基于 《使用 Debian 作为路由器》的设置。
+"><meta name=keywords content><meta name=robots content="noodp"><link rel=canonical href=https://blog.bling.moe/post/4.html><link rel=stylesheet href=https://blog.bling.moe/assets/style.css><link rel=stylesheet href=https://blog.bling.moe/style.css><link rel=apple-touch-icon-precomposed sizes=144x144 href=https://blog.bling.moe/img/apple-touch-icon-144-precomposed.png><link rel="shortcut icon" href=https://blog.bling.moe/img/favicon.png><link href=https://blog.bling.moe/assets/fonts/Inter-Italic.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=https://blog.bling.moe/assets/fonts/Inter-Regular.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=https://blog.bling.moe/assets/fonts/Inter-Medium.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=https://blog.bling.moe/assets/fonts/Inter-MediumItalic.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=https://blog.bling.moe/assets/fonts/Inter-Bold.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=https://blog.bling.moe/assets/fonts/Inter-BoldItalic.woff2 rel=preload type=font/woff2 as=font crossorigin><meta name=twitter:card content="summary"><meta name=twitter:title content="Debian 路由器上使用 Clash 作为透明代理"><meta name=twitter:description content="安装好了 Debian 路由器之后，咱们是不是有一个应用是几乎玩软路由的人都喜欢的？没错，那就是透明代理。今天小玲就来教大家在安装完 Debian 路由器之后，通过 Clash 和 nftables 实现透明代理。"><meta property="og:title" content="Debian 路由器上使用 Clash 作为透明代理"><meta property="og:description" content="安装好了 Debian 路由器之后，咱们是不是有一个应用是几乎玩软路由的人都喜欢的？没错，那就是透明代理。今天小玲就来教大家在安装完 Debian 路由器之后，通过 Clash 和 nftables 实现透明代理。"><meta property="og:type" content="article"><meta property="og:url" content="https://blog.bling.moe/post/4.html"><meta property="article:section" content="post"><meta property="article:published_time" content="2022-02-21T07:40:00+08:00"><meta property="article:modified_time" content="2022-06-06T22:45:10+08:00"><meta property="og:site_name" content="星野玲的博客"></head><body class=dark-theme><div class=container><header class=header><span class=header__inner><a href=/ class=logo style=text-decoration:none><span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg></span><span class=logo__text>星野玲的博客</span>
+<span class=logo__cursor></span></a>
+<span class=header__right><nav class=menu><ul class="menu__inner menu__inner--desktop"><li><a href=/index.xml>RSS</a></li><li><a href=/about.html>关于</a></li></ul><ul class="menu__inner menu__inner--mobile"><li><a href=/index.xml>RSS</a></li><li><a href=/about.html>关于</a></li></ul></nav><span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></span><span class=theme-toggle><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 41c10.4934.0 19-8.5066 19-19C41 11.5066 32.4934 3 22 3 11.5066 3 3 11.5066 3 22s8.5066 19 19 19zM7 22C7 13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22z"/></svg></span></span></span></header><div class=content><div class=post><h1 class=post-title>Debian 路由器上使用 Clash 作为透明代理</h1><div class=post-meta><span class=post-date>2022-02-21</span>
+<span class=post-moddate>(最后修改于：
+2022-06-06)</span>
+<span class=post-author>— 作者： 星野玲</span></div><span class=post-tags><a href=https://blog.bling.moe/tags/debian/>#Debian</a>&nbsp;
+<a href=https://blog.bling.moe/tags/%E8%B7%AF%E7%94%B1%E5%99%A8/>#路由器</a>&nbsp;
+<a href=https://blog.bling.moe/tags/%E8%BD%AF%E8%B7%AF%E7%94%B1/>#软路由</a>&nbsp;
+<a href=https://blog.bling.moe/tags/%E9%80%8F%E6%98%8E%E4%BB%A3%E7%90%86/>#透明代理</a>&nbsp;
+<a href=https://blog.bling.moe/tags/clash/>#Clash</a>&nbsp;</span><div class=post-content><p>安装好了 Debian 路由器之后，咱们是不是有一个应用是几乎玩软路由的人都喜欢的？没错，那就是透明代理。今天小玲就来教大家在安装完 Debian 路由器之后，通过 Clash 和 nftables 实现透明代理。本教程的设置均基于 《<a href=https://blog.bling.moe/post/3.html>使用 Debian 作为路由器</a>》的设置。</p><p>咱们要使用的 Clash 是 Docker 版的。这样安装起来更方便一些。Clash 模式采用 redir-host，因为小玲习惯了 redir-host 模式了，用 fake-ip 模式的话，查网站的 IP 地址会多多少少有一些不方便。</p><h2 id=创建用户组>创建用户组</h2><p>首先新建一个名为 <code>clash</code> 的用户组，因为之后咱们的 Clash 要不光能代理局域网内其他设备的流量，还要代理自身发出的流量。所以要让 Clash 运行在一个特定的用户组上。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sudo groupadd -r clash
+</span></span></code></pre></div><p>查看 <code>clash</code> 用户组的 gid。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>cat /etc/group | grep clash
+</span></span></code></pre></div><p>咱们可以看到，小玲创建的 clash 用户组的 gid 是 <code>997</code>。这个数值会根据你的环境的不同而不同，使用时请更改为你自己的 gid。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>clash:x:997:
+</span></span></code></pre></div><h2 id=编写配置文件>编写配置文件</h2><p>首先先把 Clash 的配置文件 <code>config.yaml</code> 准备好，小玲这里准备了一个。注意这里的 DNS 监听端口是 <code>1053</code>。待会咱们需要把 Dnsmasq 的上游 DNS 改为本机的 <code>1053</code> 端口。小玲不建议直接让 Clash 监听 53 端口，因为 Clash 的 hosts 功能没办法给一个域名同时指定 IPv4 和 IPv6 地址。如果你用不到 hosts 功能，让 Clash 直接监听 53 端口也是可以的，这样就可以让 Dnsmasq 不提供 DNS 服务，改由 Clash 提供 DNS 服务了。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>mkdir -p ~/config/clash
+</span></span><span style=display:flex><span>vim ~/config/clash/config.yaml
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>port</span>: <span style=color:#ae81ff>7890</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>socks-port</span>: <span style=color:#ae81ff>7891</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>redir-port</span>: <span style=color:#ae81ff>7892</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>tproxy-port</span>: <span style=color:#ae81ff>7893</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>allow-lan</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>mode</span>: <span style=color:#ae81ff>rule</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>log-level</span>: <span style=color:#ae81ff>error</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>external-controller</span>: <span style=color:#ae81ff>0.0.0.0</span>:<span style=color:#ae81ff>9090</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>secret</span>: <span style=color:#e6db74>&#34;&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>ipv6</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>bind-address</span>: <span style=color:#e6db74>&#34;*&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>hosts</span>:
+</span></span><span style=display:flex><span><span style=color:#f92672>dns</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>enable</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>listen</span>: :<span style=color:#ae81ff>1053</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>ipv6</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>enhanced-mode</span>: <span style=color:#ae81ff>redir-host</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>nameserver</span>:
+</span></span><span style=display:flex><span>    - <span style=color:#ae81ff>udp://[2001:4860:4860::8888]:53</span>
+</span></span><span style=display:flex><span>    - <span style=color:#ae81ff>udp://[2001:4860:4860::8844]:53</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>fallback</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>fallback-filter</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>geoip</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>ipcidr</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>240.0.0.0</span><span style=color:#ae81ff>/4</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>0.0.0.0</span><span style=color:#ae81ff>/32</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>proxies</span>:
+</span></span><span style=display:flex><span><span style=color:#f92672>proxy-providers</span>:
+</span></span><span style=display:flex><span><span style=color:#f92672>proxy-groups</span>:
+</span></span><span style=display:flex><span><span style=color:#f92672>rules</span>:
+</span></span></code></pre></div><p>编写 <code>docker-compose.yml</code> 文件。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>vim ~/docker-compose.yml
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>version</span>: <span style=color:#e6db74>&#34;3&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>services</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>clash</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>cap_add</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>NET_ADMIN</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>container_name</span>: <span style=color:#ae81ff>clash</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>image</span>: <span style=color:#ae81ff>dreamacro/clash:v1.7.1</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 这里的 997 请改成你的 gid。</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>user</span>: <span style=color:#e6db74>&#34;0:997&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>network_mode</span>: <span style=color:#ae81ff>host</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>restart</span>: <span style=color:#ae81ff>always</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>volumes</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>./config/clash:/root/.config/clash</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>/etc/group:/etc/group:ro</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>/etc/passwd:/etc/passwd:ro</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># 这里省略已有的 service</span>
+</span></span></code></pre></div><p>这里之所以使用 1.7.1 的 Clash 是因为这个版本之后的 Clash，redir-host 模式不好用了。</p><p>修改 <code>dnsmasq.conf</code> 文件。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>vim ~/config/dnsmasq/dnsmasq/conf
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>server=::1#1053
+</span></span><span style=display:flex><span>cache-size=0
+</span></span></code></pre></div><p><code>cache-size=0</code> 是为了禁止 Dnsmasq 缓存 DNS 查询结果，这样每次 DNS 请求都会转发到 Clash 那里。</p><p>编辑 <code>/etc/rc.local</code> 文件。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sudo vim /etc/rc.local
+</span></span></code></pre></div><p>默认内容如下。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>#!/bin/sh -e
+</span></span><span style=display:flex><span>#
+</span></span><span style=display:flex><span># rc.local
+</span></span><span style=display:flex><span>#
+</span></span><span style=display:flex><span># This script is executed at the end of each multiuser runlevel.
+</span></span><span style=display:flex><span># Make sure that the script will &#34;exit 0&#34; on success or any other
+</span></span><span style=display:flex><span># value on error.
+</span></span><span style=display:flex><span>#
+</span></span><span style=display:flex><span># In order to enable or disable this script just change the execution
+</span></span><span style=display:flex><span># bits.
+</span></span><span style=display:flex><span>#
+</span></span><span style=display:flex><span># By default this script does nothing.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>exit 0
+</span></span></code></pre></div><p>将下面的内容添加到 <code>exit 0</code> 的前面。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>ip rule add fwmark 1 lookup 100
+</span></span><span style=display:flex><span>ip route add local default dev lo table 100
+</span></span><span style=display:flex><span>ip -6 rule add fwmark 1 table 101
+</span></span><span style=display:flex><span>ip -6 route add local ::/0 dev lo table 101
+</span></span></code></pre></div><p>保存后执行一下刚刚添加的这 4 条命令，让这些命令立即生效。因为 <code>/etc/rc.local</code> 文件开机时系统都会执行一次，所以以后不用再手动执行这些命令了。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sudo ip rule add fwmark <span style=color:#ae81ff>1</span> lookup <span style=color:#ae81ff>100</span>
+</span></span><span style=display:flex><span>sudo ip route add local default dev lo table <span style=color:#ae81ff>100</span>
+</span></span><span style=display:flex><span>sudo ip -6 rule add fwmark <span style=color:#ae81ff>1</span> table <span style=color:#ae81ff>101</span>
+</span></span><span style=display:flex><span>sudo ip -6 route add local ::/0 dev lo table <span style=color:#ae81ff>101</span>
+</span></span></code></pre></div><p>编辑 <code>/etc/nftables.conf</code> 文件。注意这里小玲只是省略的无关的规则，请对比原来的文件，把新规则添加进去。切勿直接用下面的内容覆盖原来的文件。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>vim /etc/nftables.conf
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>table inet filter
+</span></span><span style=display:flex><span>delete table inet filter
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>table inet filter {
+</span></span><span style=display:flex><span>    chain input {
+</span></span><span style=display:flex><span>        type filter hook input priority filter; policy accept;
+</span></span><span style=display:flex><span>        # 这里请添加下面这 2 条规则，防止有人扫描你的端口，
+</span></span><span style=display:flex><span>        # 然后通过连接 HTTP 代理或者 Socks5 代理通过你的宽带上网。
+</span></span><span style=display:flex><span>        iifname &#34;ppp0&#34; tcp dport { 7890, 7891, 7892, 7893, 9090 } drop
+</span></span><span style=display:flex><span>        iifname &#34;ppp0&#34; udp dport { 7893 } drop
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    chain forward {
+</span></span><span style=display:flex><span>        type filter hook forward priority filter; policy accept;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    chain output {
+</span></span><span style=display:flex><span>        type filter hook output priority filter; policy accept;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>table inet clash
+</span></span><span style=display:flex><span>delete table inet clash
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>table inet clash {
+</span></span><span style=display:flex><span>    # 定义直连的 IP 段
+</span></span><span style=display:flex><span>    set ipv4_addr {
+</span></span><span style=display:flex><span>        type ipv4_addr
+</span></span><span style=display:flex><span>        flags interval
+</span></span><span style=display:flex><span>        elements = {
+</span></span><span style=display:flex><span>            10.0.0.0/8,
+</span></span><span style=display:flex><span>            127.0.0.0/8,
+</span></span><span style=display:flex><span>            169.254.0.0/16,
+</span></span><span style=display:flex><span>            172.16.0.0/12,
+</span></span><span style=display:flex><span>            192.168.0.0/16,
+</span></span><span style=display:flex><span>            240.0.0.0/4
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    set ipv6_addr {
+</span></span><span style=display:flex><span>        type ipv6_addr
+</span></span><span style=display:flex><span>        flags interval
+</span></span><span style=display:flex><span>        elements = {
+</span></span><span style=display:flex><span>            ::ffff:0.0.0.0/96,
+</span></span><span style=display:flex><span>            64:ff9b::/96,
+</span></span><span style=display:flex><span>            100::/64,
+</span></span><span style=display:flex><span>            2001::/32,
+</span></span><span style=display:flex><span>            2001:10::/28,
+</span></span><span style=display:flex><span>            2001:20::/28,
+</span></span><span style=display:flex><span>            2001:db8::/32,
+</span></span><span style=display:flex><span>            2002::/16,
+</span></span><span style=display:flex><span>            fc00::/7,
+</span></span><span style=display:flex><span>            fe80::/10
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    chain clash-tproxy {
+</span></span><span style=display:flex><span>        # 不代理未指定地址，本地地址，广播地址，组播地址。
+</span></span><span style=display:flex><span>        fib daddr type { unspec, local, anycast, multicast } return
+</span></span><span style=display:flex><span>        # 不代理直连 IP 段。
+</span></span><span style=display:flex><span>        ip daddr @ipv4_addr return
+</span></span><span style=display:flex><span>        ip6 daddr @ipv6_addr return
+</span></span><span style=display:flex><span>        # 不代理 NTP 服务器的端口，
+</span></span><span style=display:flex><span>        # 小玲发现不加上这条规则会导致局域网内的设备无法通过 NTP 服务器同步时间。
+</span></span><span style=display:flex><span>        udp dport { 123 } return
+</span></span><span style=display:flex><span>        # 最后不符合上面条件的流量全部送入 Clash。
+</span></span><span style=display:flex><span>        meta l4proto { tcp, udp } meta mark set 1 tproxy to :7893 accept
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    chain clash-mark {
+</span></span><span style=display:flex><span>        # 不代理未指定地址，本地地址，广播地址，组播地址。
+</span></span><span style=display:flex><span>        fib daddr type { unspec, local, anycast, multicast } return
+</span></span><span style=display:flex><span>        # 不代理保留地址。
+</span></span><span style=display:flex><span>        ip daddr @ipv4_addr return
+</span></span><span style=display:flex><span>        ip6 daddr @ipv6_addr return
+</span></span><span style=display:flex><span>        # 不代理 NTP 服务器的端口，
+</span></span><span style=display:flex><span>        # 小玲发现不加上这条规则会路由器自身无法通过 NTP 服务器同步时间。
+</span></span><span style=display:flex><span>        udp dport { 123 } return
+</span></span><span style=display:flex><span>        # 最后不符合上面条件的流量打上标记
+</span></span><span style=display:flex><span>        meta mark set 1
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    chain mangle-output {
+</span></span><span style=display:flex><span>        type route hook output priority mangle; policy accept;
+</span></span><span style=display:flex><span>        # 代理 TCP 和 UDP 协议，gid 不是 997，从本地发送到外部的流量。
+</span></span><span style=display:flex><span>        # 这句是路由器自身的流量走透明代理的关键规则。
+</span></span><span style=display:flex><span>        meta l4proto { tcp, udp } skgid != 997 ct direction original jump clash-mark
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    chain mangle-prerouting {
+</span></span><span style=display:flex><span>        type filter hook prerouting priority mangle; policy accept;
+</span></span><span style=display:flex><span>        # 代理从 lo 网卡和 enp1s0 网卡进入的 TCP 和 UDP 协议，从本地发送到外部的流量。
+</span></span><span style=display:flex><span>        # 这句是局域网的设备的流量走透明代理的关键规则。
+</span></span><span style=display:flex><span>        iifname { lo, enp1s0 } meta l4proto { tcp, udp } ct direction original jump clash-tproxy
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>要代理路由器自身发出的流量时请确保 Clash 发出的流量不经过透明代理，否则会引起回环。这就需要规则里的 gid 设置正确了。</p><p>之所以用 <code>iifname { lo, enp1s0 }</code> 限制入口网卡是为了防止 bridge 网络模式下的 Docker 容器发出的流量走透明代理。如果不加上这个限制会导致 bridge 网络模式下的 Docker 容器直接访问不了外网。小玲现在还没有办法让 bridge 网络模式下的 Docker 容器通过 Tproxy 走透明代理。如果你有办法，不妨在评论区告诉小玲。<code>lo</code> 网卡是必须写上去的，如果不写路由器自身发出的流量就不能走代理。<code>enp1s0</code> 请改成你的 LAN 口网卡名称。</p><h2 id=启动-clash>启动 Clash</h2><p>重启 Dnsmasq</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sudo docker-compose -f ~/docker-compose.yml restart dnsmasq
+</span></span></code></pre></div><p>启动 Clash</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sudo docker-compose -f ~/docker-compose.yml up -d
+</span></span></code></pre></div><p>重载 nftables。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sudo systemctl reload nftables
+</span></span></code></pre></div><p>好了，现在在浏览器打开 <code>http://yacd.haishan.me/?hostname=&lt;你的路由器的 IP 地址>&port=9090&secret=#/</code> 看看有没有流量数据。如果有，那么透明代理就设置成功啦。现在你的路由器已经能代理局域网和路由器自身的流量了。如果想让路由器上面的 Docker 容器也走透明代理，请把这个容器的网络模式设为 <code>host</code>。</p></div><div class=pagination><div class=pagination__title><span class=pagination__title-h>阅读其它文章</span><hr></div><div class=pagination__buttons><span class="button next"><a href=https://blog.bling.moe/post/3.html><span class=button__text>使用 Debian 作为路由器</span>
+<span class=button__icon>→</span></a></span></div></div><div id=disqus_thread></div><script type=application/javascript>window.disqus_config=function(){this.page.identifier='4',this.page.url='https://blog.bling.moe/post/4/'},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return}var t=document,e=t.createElement('script');e.async=!0,e.src='//hoshinorei.disqus.com/embed.js',e.setAttribute('data-timestamp',+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></div><footer class=footer><div class=footer__inner><a href=/ class=logo style=text-decoration:none><span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg></span><span class=logo__text>星野玲的博客</span>
+<span class=logo__cursor></span></a><div class=copyright><span>© 2022 Powered by
+<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a></span>
+<span>Theme created by
+<a href=https://twitter.com/panr target=_blank rel=noopener>panr</a></span></div></div></footer><script src=https://blog.bling.moe/assets/main.js></script>
+<script src=https://blog.bling.moe/assets/prism.js></script></div><script async src="https://www.googletagmanager.com/gtag/js?id=G-E6TTBX28QL"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-E6TTBX28QL',{anonymize_ip:!1})}</script></body></html>
