@@ -27,8 +27,8 @@ languages:
     writtenBy: 作者：
     readMore: 阅读更多
     readOtherPosts: 阅读其它文章
-    newerPosts: Newer posts
-    olderPosts: Older posts
+    newerPosts: 较新的文章
+    olderPosts: 较旧的文章
     dateFormatSingle: 2006-01-02
     dateFormatList: 2006-01-02
     lastModDisplay: 最后修改于：
