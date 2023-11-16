@@ -161,6 +161,40 @@ sudo nmcli c up pppoe
 sudo apt install -y ppp
 ```
 
+### 获取 IPv6 PD 前缀
+
+如果要获取 PD 前缀，并把它添加到 `lan` 连接上，可以使用下面的命令。
+
+```bash
+sudo nmcli c modify "lan" ipv6.method "shared"
+```
+
+通过 NetworkManager 获取 PD 前缀时，几乎没有可以自定义的选项，例如前缀长度，路由器在 `lan` 连接上的主机地址。不过小玲只能获取一个 `/64` 前缀，所以不能配置也没有多大负面影响。
+
+如果当前没有 PD 前缀，重新启用 `pppoe` 连接以获取 PD 前缀。
+
+```bash
+sudo nmcli c down pppoe && sudo nmcli c up pppoe
+```
+
+#### 自动重新获取 PD 前缀
+
+有时候，PPPoE 连接会自己断开重连，这时候如果 PD 前缀没有更新，会导致局域网内的设备无法使用 IPv6。
+
+小玲为了解决这个问题，用了个野路子，思路就是写一个脚本，当 PPPoE 连接断开时，自动禁用并启用 PPPoE 连接以达到重新获取 PD 前缀的目的。
+
+```bash
+sudo vim /etc/ppp/ipv6-down.d/restart_pppoe
+```
+
+```bash
+#!/usr/bin/bash
+
+# CONNECTION_NAME 变量的值为 NetworkManager 里用于 PPPoE 拨号的连接名称
+CONNECTION_NAME=pppoe
+nmcli c down $CONNECTION_NAME && nmcli c up $CONNECTION_NAME
+```
+
 ### 添加一个带 VLAN ID 的连接
 
 通过下面的命令来添加一个带 VLAN ID 的连接。
