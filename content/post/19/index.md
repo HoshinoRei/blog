@@ -106,7 +106,7 @@ sudo nmcli c add type "ethernet" con-name "lan" ifname "ens33" ipv4.method "manu
 如果需要设置静态 IPv6 地址，可以这么添加。
 
 ```bash
-sudo nmcli c add type "ethernet" con-name "lan" ifname "ens33" ipv4.method "manual" ipv4.addresses "192.168.3.1/24" ipv6.method "manual" ipv6.addresses "fddd:afcf::/64
+sudo nmcli c add type "ethernet" con-name "lan" ifname "ens33" ipv4.method "manual" ipv4.addresses "192.168.3.1/24" ipv6.method "manual" ipv6.addresses "fddd:afcf::/64"
 ```
 
 ### 查看连接详情
