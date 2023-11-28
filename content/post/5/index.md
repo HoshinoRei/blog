@@ -59,9 +59,14 @@ hostname "Left 4 Dead 2 dedicated server"
 sv_tags hidden
 ```
 
+### 准备 host.txt 文件
+
+`host.txt` 文件是玩家进入服务器后，右上角显示的横幅的内容, 它的内容就在这里定义。你也可以留空，让它为一个空白的文本文件。
+
+
 ### 准备 motd.txt 文件
 
-MOTD 的全称为 Message of the Day，作用是玩家刚进入服务器时，会显示一个欢迎消息，它的内容就在这里定义。你也可以留空，让它为一个空白的文本文件。
+MOTD 的全称为 Message of the Day，作用是玩家刚进入服务器时，会显示一个欢迎消息，可以为空。
 
 ```bash
 touch ~/l4d2server/motd.txt
@@ -93,6 +98,7 @@ services:
       # 如果主机上没有 addons 这个文件夹，创建容器时会自动在主机上创建这个文件夹。
       - ./addons/:/home/steam/l4d2server/left4dead2/addons/
       - ./cfg/server.cfg:/home/steam/l4d2server/left4dead2/cfg/server.cfg:ro
+      - ./host.txt:/home/steam/l4d2server/left4dead2/host.txt:ro
       - ./motd.txt:/home/steam/l4d2server/left4dead2/motd.txt:ro
 ```
 
