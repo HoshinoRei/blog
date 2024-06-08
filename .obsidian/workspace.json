@@ -1,0 +1,189 @@
+{
+  "main": {
+    "id": "95d0a08ade4086fd",
+    "type": "split",
+    "children": [
+      {
+        "id": "489bf600bfe27c86",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8c6300349f9d291c",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {}
+            }
+          }
+        ]
+      },
+      {
+        "id": "f0b88a2ccc664151",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2be978c2b70a3bcc",
+            "type": "leaf",
+            "state": {
+              "type": "hugo-preview-view",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "67e37a3c0c0ff64e",
+    "type": "split",
+    "children": [
+      {
+        "id": "c882c428d8bd0a2c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5990a2681d9e0fa6",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "868894ddc2d18a31",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "649269728106218c",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "eb51557485f38503",
+    "type": "split",
+    "children": [
+      {
+        "id": "b93647382734f6db",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2d17e25cb74aea36",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "e45e165000b08426",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "daec1981597a72c1",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "475ddcf7b4fd9153",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {}
+            }
+          },
+          {
+            "id": "c5a6b23b35e65e95",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "8c6300349f9d291c",
+  "lastOpenFiles": [
+    "content/post/5/index.md",
+    "public/tags/路由器/index.xml",
+    "public/tags/软路由/index.xml",
+    "public/tags/开箱/index.xml",
+    "public/tags/算法/index.xml",
+    "public/tags/华硕ax86u/index.xml",
+    "public/tags/小狼毫/index.xml",
+    "public/tags/求生之路2/index.xml",
+    "public/tags/windows-11/index.xml",
+    "public/tags/windows-10/index.xml",
+    "public/tags/winget/index.xml",
+    "public/post/6/Snipaste_2022-08-07_19-20-41.png",
+    "public/post/6/Snipaste_2022-07-09_18-52-47.png",
+    "public/post/6/Snipaste_2022-07-03_15-09-35.png",
+    "public/post/6/Snipaste_2022-07-03_15-09-12.png",
+    "public/post/6/Snipaste_2022-07-03_15-08-52.png",
+    "public/post/6/Snipaste_2022-07-03_15-06-58.png",
+    "public/post/6/Snipaste_2022-07-03_15-06-19.png",
+    "public/post/6/Snipaste_2022-07-03_15-04-39.png",
+    "public/post/6/Snipaste_2022-07-03_15-04-29.png",
+    "public/post/6/Snipaste_2022-07-03_15-04-19.png",
+    "content/links.md",
+    "content/about.md"
+  ]
+}
