@@ -7,9 +7,8 @@ draft: false
 tags:
   - Scoop
   - Windows
-  - Windows 10
-  - Windows 11
- 
+  - Windows10
+  - Windows11
 ---
 
 今天小玲来介绍 Windows 上的又一个包管理器——Scoop，这也是小玲在 Windows 系统上最喜欢也是用的最多的包管理器。

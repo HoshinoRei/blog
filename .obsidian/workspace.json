@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/8/index.md",
+                "file": "content/post/11/index.md",
                 "mode": "source",
                 "source": false
               }
@@ -107,7 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/post/8/index.md",
+                "file": "content/post/11/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -124,7 +124,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "content/post/8/index.md",
+                "file": "content/post/11/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -147,7 +147,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/post/8/index.md"
+                "file": "content/post/11/index.md"
               }
             }
           }
@@ -171,6 +171,7 @@
   },
   "active": "0ef43cb9526be356",
   "lastOpenFiles": [
+    "content/post/8/index.md",
     "content/post/7/index.md",
     "content/post/6/index.md",
     "content/post/5/index.md",
