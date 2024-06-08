@@ -22,11 +22,11 @@
         ]
       },
       {
-        "id": "ceacede910ba714f",
+        "id": "c243965b87ad575a",
         "type": "tabs",
         "children": [
           {
-            "id": "626701083a02ab65",
+            "id": "06994c706cf69899",
             "type": "leaf",
             "state": {
               "type": "hugo-preview-view",
@@ -169,7 +169,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "5990a2681d9e0fa6",
+  "active": "06994c706cf69899",
   "lastOpenFiles": [
     "config.yaml~",
     "content/about.md",
