@@ -32,7 +32,7 @@ languages:
     dateFormatSingle: 2006-01-02
     dateFormatList: 2006-01-02
     lastModDisplay: 最后修改于：
-  
+
     params:
       logo:
         logoText: 星野玲的博客
@@ -40,6 +40,9 @@ languages:
 
     menu:
       main:
+        - identifier: digital-garden
+          name: 数字花园
+          url: https://digital-garden.bling.moe
         - identifier: about
           name: 关于
           url: /about/
