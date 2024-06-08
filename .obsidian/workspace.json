@@ -62,7 +62,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:Docker",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -88,7 +88,7 @@
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -170,22 +170,23 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "475ddcf7b4fd9153",
+  "active": "8c6300349f9d291c",
   "lastOpenFiles": [
+    "public/tags/left4dead2/index.xml",
+    "public/tags/left4dead2/page/1/index.html",
+    "public/tags/left4dead2/page/1",
+    "public/tags/left4dead2/page",
+    "public/tags/left4dead2/index.html",
+    "public/tags/left4dead2",
+    "public/tags/dockercompose/index.xml",
+    "public/tags/dockercompose/page/1/index.html",
+    "public/tags/dockercompose/page/1",
+    "public/tags/dockercompose/page",
+    "public/tags/dockercompose/index.html",
     "content/post/1/index.md",
     "content/post/2/index.md",
     "content/post/3/index.md",
     "content/post/5/index.md",
-    "public/tags/路由器/index.xml",
-    "public/tags/软路由/index.xml",
-    "public/tags/开箱/index.xml",
-    "public/tags/算法/index.xml",
-    "public/tags/华硕ax86u/index.xml",
-    "public/tags/小狼毫/index.xml",
-    "public/tags/求生之路2/index.xml",
-    "public/tags/windows-11/index.xml",
-    "public/tags/windows-10/index.xml",
-    "public/tags/winget/index.xml",
     "public/post/6/Snipaste_2022-08-07_19-20-41.png",
     "public/post/6/Snipaste_2022-07-09_18-52-47.png",
     "public/post/6/Snipaste_2022-07-03_15-09-35.png",
