@@ -11,8 +11,12 @@
             "id": "8c6300349f9d291c",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "content/post/5/index.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -74,8 +78,17 @@
               "type": "bookmarks",
               "state": {}
             }
+          },
+          {
+            "id": "c5a6b23b35e65e95",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {}
+            }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -95,6 +108,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "content/post/5/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -111,6 +125,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "content/post/5/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -132,23 +147,18 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
-            }
-          },
-          {
-            "id": "c5a6b23b35e65e95",
-            "type": "leaf",
-            "state": {
-              "type": "git-view",
-              "state": {}
+              "state": {
+                "file": "content/post/5/index.md"
+              }
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -160,8 +170,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "8c6300349f9d291c",
+  "active": "475ddcf7b4fd9153",
   "lastOpenFiles": [
+    "content/post/1/index.md",
+    "content/post/2/index.md",
+    "content/post/3/index.md",
     "content/post/5/index.md",
     "public/tags/路由器/index.xml",
     "public/tags/软路由/index.xml",
