@@ -7,9 +7,8 @@ draft: false
 tags:
   - winget
   - Windows
-  - Windows 10
-  - Windows 11
-
+  - Windows10
+  - Windows11
 ---
 
 > Windows程序包管理器（英语：Windows Package Manager，也称 winget）是微软为 Windows 10 开发的一款自由开源的软件包管理器。它由一个命令行实用程序（CLI）和一组安装应用程序的服务组成。独立软件供应商可以将其作为软件包的分发渠道。[^1]
