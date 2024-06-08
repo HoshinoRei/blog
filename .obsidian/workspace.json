@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/20/index.md",
+                "file": "content/links.md",
                 "mode": "source",
                 "source": false
               }
@@ -107,7 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/post/20/index.md",
+                "file": "content/links.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -124,7 +124,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "content/post/20/index.md",
+                "file": "content/links.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -147,7 +147,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/post/20/index.md"
+                "file": "content/links.md"
               }
             }
           }
@@ -171,13 +171,15 @@
   },
   "active": "0ef43cb9526be356",
   "lastOpenFiles": [
+    "content/about.md",
+    "content/links.md",
+    "content/post/20/index.md",
     "public/tags/nodejs/index.xml",
     "public/tags/nodejs/page/1/index.html",
     "public/tags/nodejs/page/1",
     "public/tags/nodejs/page",
     "public/tags/nodejs/index.html",
     "public/tags/nodejs",
-    "content/about.md",
     "content/post/19/index.md",
     "content/post/18/index.md",
     "content/post/15/index.md",
@@ -196,7 +198,6 @@
     "public/tags/windows11/page/1/index.html",
     "public/tags/windows11/page/1",
     "public/tags/windows11/page",
-    "public/tags/windows11/index.html",
     "public/post/6/Snipaste_2022-08-07_19-20-41.png",
     "public/post/6/Snipaste_2022-07-09_18-52-47.png",
     "public/post/6/Snipaste_2022-07-03_15-09-35.png",
@@ -206,7 +207,6 @@
     "public/post/6/Snipaste_2022-07-03_15-06-19.png",
     "public/post/6/Snipaste_2022-07-03_15-04-39.png",
     "public/post/6/Snipaste_2022-07-03_15-04-29.png",
-    "public/post/6/Snipaste_2022-07-03_15-04-19.png",
-    "content/links.md"
+    "public/post/6/Snipaste_2022-07-03_15-04-19.png"
   ]
 }
