@@ -6,9 +6,8 @@ description: 一直以来，小玲都是用 Scoop 来安装 Node.js 的。以前
 draft: false
 tags:
   - fnm
-  - Node.js
+  - NodeJS
   - Windows
-
 ---
 
 一直以来，小玲都是用 [Scoop]({{< ref "11.md" >}}) 来安装 Node.js 的。以前小玲只用 main bucket 下的 `nodejs` 这个包。因为小玲以前没有使用旧版的 Node.js 的需求（虽然这个问题也能用 Scoop 的 version bucket 解决。），有魔法以后也不用担心下载国外的文件慢的问题，但是小玲决定改变这种安装方式。
