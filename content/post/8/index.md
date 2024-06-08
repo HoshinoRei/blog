@@ -7,8 +7,7 @@ draft: false
 tags:
   - TranslucentTB
   - Windows
-  - Windows 10
-
+  - Windows10
 ---
 
 众所周知，[TranslucentTB](https://www.microsoft.com/store/productId/9PF4KZ2VN4W9) 是 Windows 上最好用的能让任务栏透明的软件。但是怎么调教才能尽可能的漂亮呢？小玲自己调了下 TranslucentTB 的设置，总算调一个比较满意的设置。
