@@ -22,11 +22,11 @@
         ]
       },
       {
-        "id": "c243965b87ad575a",
+        "id": "b6c31ef846b8e87d",
         "type": "tabs",
         "children": [
           {
-            "id": "06994c706cf69899",
+            "id": "e39f0fd07569ee7d",
             "type": "leaf",
             "state": {
               "type": "hugo-preview-view",
@@ -169,7 +169,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0ef43cb9526be356",
+  "active": "e39f0fd07569ee7d",
   "lastOpenFiles": [
     "content/post/14/index.md",
     "content/post/11/index.md",
