@@ -13,24 +13,10 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/13/index.md",
+                "file": "content/post/20/index.md",
                 "mode": "source",
                 "source": false
               }
-            }
-          }
-        ]
-      },
-      {
-        "id": "b6c31ef846b8e87d",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "e39f0fd07569ee7d",
-            "type": "leaf",
-            "state": {
-              "type": "hugo-preview-view",
-              "state": {}
             }
           }
         ]
@@ -107,7 +93,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/post/13/index.md",
+                "file": "content/post/20/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -124,7 +110,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "content/post/13/index.md",
+                "file": "content/post/20/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -147,7 +133,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/post/13/index.md"
+                "file": "content/post/20/index.md"
               }
             }
           }
@@ -169,8 +155,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "e39f0fd07569ee7d",
+  "active": "5990a2681d9e0fa6",
   "lastOpenFiles": [
+    "content/post/13/index.md",
     "content/post/14/index.md",
     "content/post/11/index.md",
     "content/post/6/index.md",
@@ -187,7 +174,6 @@
     "content/post/19/index.md",
     "content/post/18/index.md",
     "content/post/15/index.md",
-    "content/post/13/index.md",
     "content/post/12/index.md",
     "content/post/8/index.md",
     "content/post/7/index.md",
