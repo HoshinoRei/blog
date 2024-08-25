@@ -169,7 +169,7 @@ dhcp-option=interface:enp1s0.30,option6:dns-server,[fddd:afcf:0:2::]
 
 设置完 R4S，接下来就要设置 AX86U 了。先在 AX86U 里设置 WiFi。小玲专用的 WiFi 就在 `无线网络` 里设置，家人专用的 WiFi、访客专用的 WiFi、智能家居专用的 WiFi 在 `访客网络` 里设置。同时请把 AX86U 的操作模式设为 `无线接入点（AP）模式`。
 
-在这里有一个问题需要搞清楚，那就是在 AX86U 的系统里，网络接口是以 `eth0`、`eth1` 这样的字符串表示的。咱们需要知道哪个网口和哪个 WiFi 对应哪个接口。好在小玲找到一份对应关系。[^3] 不过这个对应关系不包含访客网络的接口。小玲又自己测试了一下，整理出了以下的对应关系。
+在这里有一个问题需要弄明白，那就是在 AX86U 的系统里，网络接口是以 `eth0`、`eth1` 这样的字符串表示的。咱们需要知道哪个网口和哪个 WiFi 对应哪个接口。好在小玲找到一份对应关系。[^3] 不过这个对应关系不包含访客网络的接口。小玲又自己测试了一下，整理出了以下的对应关系。
 
 [^3]: 来源：[VLANs, Trunk interface, tagged and untagged traffic RT-AX86U and RT-AX88U](https://www.snbforums.com/threads/vlans-trunk-interface-tagged-and-untagged-traffic-rt-ax86u-and-rt-ax88u.78411/)。
 
