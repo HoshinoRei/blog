@@ -1,0 +1,184 @@
+<!doctype html><html lang=zh-cn><head><title>Docker 下的 Traefik 上手教程（二） ::
+星野玲的博客</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="上周小玲讲了 Traefik 的基本使用方法。这周小玲来讲一些进阶的知识。因为看过上一篇文章的你已经知道修改 docker-compose.yml 后都要 docker compose up 一下了，所以这篇文章就不再提到这个"><meta name=keywords content><meta name=robots content="noodp"><link rel=canonical href=https://blog.bling.moe/post/15/><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=https://blog.bling.moe/style.css><link rel=apple-touch-icon-precomposed sizes=144x144 href=https://blog.bling.moe/img/apple-touch-icon-144-precomposed.png><link rel="shortcut icon" href=https://blog.bling.moe/img/favicon.png><link href=/fonts/Inter-Italic.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-Regular.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-Medium.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-MediumItalic.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-Bold.woff2 rel=preload type=font/woff2 as=font crossorigin><link href=/fonts/Inter-BoldItalic.woff2 rel=preload type=font/woff2 as=font crossorigin><meta name=twitter:card content="summary"><meta name=twitter:title content="Docker 下的 Traefik 上手教程（二）"><meta name=twitter:description content="上周小玲讲了 Traefik 的基本使用方法。这周小玲来讲一些进阶的知识。"><meta property="og:title" content="Docker 下的 Traefik 上手教程（二）"><meta property="og:description" content="上周小玲讲了 Traefik 的基本使用方法。这周小玲来讲一些进阶的知识。"><meta property="og:type" content="article"><meta property="og:url" content="https://blog.bling.moe/post/15/"><meta property="article:section" content="post"><meta property="article:published_time" content="2023-01-29T00:00:00+08:00"><meta property="article:modified_time" content="2021-11-18T14:08:07+08:00"><meta property="og:site_name" content="星野玲的博客"></head><body class=dark-theme><div class=container><header class=header><span class=header__inner><a href=/ class=logo style=text-decoration:none><span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg></span><span class=logo__text>星野玲的博客</span>
+<span class=logo__cursor></span></a>
+<span class=header__right><nav class=menu><ul class="menu__inner menu__inner--desktop"><li><a href=/index.xml>RSS</a></li><li><a href=/about/>关于</a></li><li><a href=/links/>友链</a></li><ul class=menu__sub-inner><li class=menu__sub-inner-more-trigger>查看更多
+<span class=menu__sub-inner-more-trigger-icon><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg></span></li><ul class="menu__sub-inner-more hidden"><li><a href=https://digital-garden.bling.moe>数字花园</a></li></ul></ul></ul><ul class="menu__inner menu__inner--mobile"><li><a href=/index.xml>RSS</a></li><li><a href=/about/>关于</a></li><li><a href=/links/>友链</a></li><li><a href=https://digital-garden.bling.moe>数字花园</a></li></ul></nav><span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></span><span class=theme-toggle><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 41c10.4934.0 19-8.5066 19-19C41 11.5066 32.4934 3 22 3 11.5066 3 3 11.5066 3 22s8.5066 19 19 19zM7 22C7 13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22z"/></svg></span></span></span></header><div class=content><article class=post><h1 class=post-title>Docker 下的 Traefik 上手教程（二）</h1><div class=post-meta><time class=post-date>2023-01-29</time>
+<span class=post-author>— 作者： 星野玲</span></div><span class=post-tags><a href=https://blog.bling.moe/tags/docker/>#Docker</a>&nbsp;
+<a href=https://blog.bling.moe/tags/docker-compose/>#Docker Compose</a>&nbsp;
+<a href=https://blog.bling.moe/tags/traefik/>#Traefik</a>&nbsp;</span><div class=post-content><p>上周小玲讲了 Traefik 的基本使用方法。这周小玲来讲一些进阶的知识。因为看过上一篇文章的你已经知道修改 <code>docker-compose.yml</code> 后都要 <code>docker compose up</code> 一下了，所以这篇文章就不再提到这个命令了。</p><h2 id=middleware>middleware
+<a href=#middleware class=h-anchor aria-hidden=true>#</a></h2><p>咱们在使用 Traefik 时，一般都会用到 middleware。比如咱们可以通过中间件让访问者浏览 HTTP 协议的地址时，自动跳转到 HTTPS 协议，或者开启压缩以节省服务器的带宽。下面就用这两个例子来讲解如何使用 middleware。</p><p>首先咱们需要定义一个 middleware。在这里需要注意一点的就是在 <code>docker-compose.yml</code> 的 labels 里定义的 route 要想使用在文件里定义的 middleware 时，需要在 middleware 的名称后加上 <code>@file</code>。反之在文件里定义的 route 要想使用在 <code>docker-compose.yml</code> 的 labels 里定义的 middleware 时，需要在 middleware 的名称后加上 <code>@docker</code>。<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup>关于这一点，下面会有例子解释。</p><h3 id=http-跳转-https>HTTP 跳转 HTTPS
+<a href=#http-%e8%b7%b3%e8%bd%ac-https class=h-anchor aria-hidden=true>#</a></h3><p>如果需要在 <code>docker-compose.yml</code> 的 labels 里定义 middleware，咱们可以在 Traefik 的 <code>docker-compose.yml</code> 文件里这样子写。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>version</span>: <span style=color:#e6db74>&#34;3&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>services</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>traefik</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>container_name</span>: <span style=color:#ae81ff>traefik</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>command</span>: 
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>providers.docker</span>
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>api.insecure</span>
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>providers.file.directory=/etc/traefik/config</span>
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>entryPoints.web.address=:80</span>
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>entrypoints.websecure.address=:443</span>
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web</span>
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>certificatesresolvers.myresolver.acme.storage=/etc/traefik/certs/acme.json</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>extra_hosts</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;host.docker.internal&#34;: </span><span style=color:#e6db74>&#34;172.18.0.1&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 下面未注释的 2 行是新增的内容</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>labels</span>:
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 声明一个名为 redirect-to-https 的 middleware</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 在名为 redirect-to-https 的 middleware 下，将 redirectscheme 的 scheme 设置为 &#34;https&#34;</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>image</span>: <span style=color:#ae81ff>traefik:v3.0</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>ports</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>80</span>:<span style=color:#ae81ff>80</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>443</span>:<span style=color:#ae81ff>443</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>8080</span>:<span style=color:#ae81ff>8080</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>restart</span>: <span style=color:#ae81ff>unless-stopped</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>volumes</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>/var/run/docker.sock:/var/run/docker.sock</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>../../docker_config/traefik:/etc/traefik/config</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>../../docker_data/traefik/certs:/etc/traefik/certs</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>networks</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>default</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>driver</span>: <span style=color:#ae81ff>bridge</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>ipam</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>driver</span>: <span style=color:#ae81ff>default</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>config</span>:
+</span></span><span style=display:flex><span>        - <span style=color:#f92672>subnet</span>: <span style=color:#e6db74>&#34;172.18.0.0/24&#34;</span>
+</span></span></code></pre></div><p>然后修改服务的 labels，让服务使用这个 middleware。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>version</span>: <span style=color:#e6db74>&#34;3&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>services</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>whoami</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>image</span>: <span style=color:#ae81ff>traefik/whoami</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>labels</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.docker.network=traefik_default</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.services.whoami.loadbalancer.server.port=80</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami.rule=Host(`whoami.bling.moe`)</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami.service=whoami</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami.entrypoints=web</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 下面未注释的 2 行是新增的内容</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 在名为 whoami 的 route 下，将 middlewares 设置为 &#34;redirect-to-https&#34;</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 如果有多个 middleware，可以用英文逗号分隔</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami.middlewares=redirect-to-https</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.rule=Host(`whoami.bling.moe`)</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.service=whoami</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.tls</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.entrypoints=websecure</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.tls.certresolver=myresolver</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>networks</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik_default</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>networks</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>traefik_default</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>external</span>: <span style=color:#66d9ef>true</span>
+</span></span></code></pre></div><h3 id=启用压缩>启用压缩
+<a href=#%e5%90%af%e7%94%a8%e5%8e%8b%e7%bc%a9 class=h-anchor aria-hidden=true>#</a></h3><p>Traefik 3.0 支持 gzip 和 Brotli 压缩。</p><p>如果需要在文件里定义 middleware，咱们可以在 Traefik 的 <code>docker-compose.yml</code> 文件里这样子写。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>vim ~/docker_config/traefik/middlewares.yml
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>http</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>middlewares</span>:
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 定义一个名为 compression 的 middleware</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>compression</span>:
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 名为 compression 的 middleware 里包含了 compress 这个 middleware</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>compress</span>: {}
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>version</span>: <span style=color:#e6db74>&#34;3&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>services</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>whoami</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>image</span>: <span style=color:#ae81ff>traefik/whoami</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>labels</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.docker.network=traefik_default</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.services.whoami.loadbalancer.server.port=80</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami.rule=Host(`whoami.bling.moe`)</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami.service=whoami</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami.entrypoints=web</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami.middlewares=redirect-to-https</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.rule=Host(`whoami.bling.moe`)</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.service=whoami</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.tls</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.entrypoints=websecure</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.tls.certresolver=myresolver</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 下面未注释的 1 行是新增的内容</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 在名为 whoami-secured 的 route 下，将 middlewares 设置为 &#34;compression@file&#34;</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.middlewares=compression@file</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>networks</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik_default</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>networks</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>traefik_default</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>external</span>: <span style=color:#66d9ef>true</span>
+</span></span></code></pre></div><h3 id=http-basic-authentication>HTTP Basic Authentication
+<a href=#http-basic-authentication class=h-anchor aria-hidden=true>#</a></h3><p>咱们首先要通过一个命令将用户名变成一段 Traefik 可以识别的字符串。</p><p>使用这个命令前，咱们需要安装 <code>apache2-utils</code>。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>apt install -y apache2-utils
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>echo <span style=color:#66d9ef>$(</span>htpasswd -nB &lt;username&gt;<span style=color:#66d9ef>)</span> | sed -e s/<span style=color:#ae81ff>\\</span>$/<span style=color:#ae81ff>\\</span>$<span style=color:#ae81ff>\\</span>$/g
+</span></span></code></pre></div><p>咱们以用户名 <code>test</code>，密码 <code>123456</code> 为例。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>echo <span style=color:#66d9ef>$(</span>htpasswd -nB test<span style=color:#66d9ef>)</span> | sed -e s/<span style=color:#ae81ff>\\</span>$/<span style=color:#ae81ff>\\</span>$<span style=color:#ae81ff>\\</span>$/g
+</span></span></code></pre></div><p>输入两次密码后，返回</p><pre tabindex=0><code class=language-test data-lang=test>test:$$2y$$05$$SkpWa0Cx2rEoAEapv19Mjub.SaEmo7tJ5TqagI7ZqCNEPms5M0zUq
+</code></pre><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>version</span>: <span style=color:#e6db74>&#34;3&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>services</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>whoami</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>image</span>: <span style=color:#ae81ff>traefik/whoami</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>labels</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.docker.network=traefik_default</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.services.whoami.loadbalancer.server.port=80</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami.rule=Host(`whoami.bling.moe`)</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami.service=whoami</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami.entrypoints=web</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami.middlewares=redirect-to-https</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.rule=Host(`whoami.bling.moe`)</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.service=whoami</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.tls</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.entrypoints=websecure</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.tls.certresolver=myresolver</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 下面未注释的 1 行是修改的内容</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 在名为 whoami-secured 的 route 下，将 middlewares 设置为 &#34;compression@file,test-auth&#34;</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.routers.whoami-secured.middlewares=compression@file,test-auth</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 下面未注释的 1 行是新增的内容</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 声明一个名为 test-auth 的 middleware</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 在名为 test-auth 的 middleware 下，将 basicauth 的 users 设置为 &#34;test:$$2y$$05$$SkpWa0Cx2rEoAEapv19Mjub.SaEmo7tJ5TqagI7ZqCNEPms5M0zUq&#34;</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 如果有多个用户，可以用英文逗号分隔</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.middlewares.test-auth.basicauth.users=test:$$2y$$05$$SkpWa0Cx2rEoAEapv19Mjub.SaEmo7tJ5TqagI7ZqCNEPms5M0zUq</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>networks</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik_default</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>networks</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>traefik_default</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>external</span>: <span style=color:#66d9ef>true</span>
+</span></span></code></pre></div><h2 id=启用-http3>启用 HTTP/3
+<a href=#%e5%90%af%e7%94%a8-http3 class=h-anchor aria-hidden=true>#</a></h2><p>如果要启用 HTTP/3，只需在 Traefik 的 <code>docker-compose.yml</code> 文件的 command 里加上这两行就可以了。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>version</span>: <span style=color:#e6db74>&#34;3&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>services</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>traefik</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>container_name</span>: <span style=color:#ae81ff>traefik</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>command</span>: 
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>providers.docker</span>
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>api.insecure</span>
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>providers.file.directory=/etc/traefik/config</span>
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>entryPoints.web.address=:80</span>
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>entrypoints.websecure.address=:443</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 下面未注释的 2 行是新增的内容</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 在名为 websecure 的 entrypoint 下，开启 HTTP/3</span>
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>entrypoints.websecure.http3</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 在名为 websecure 的 entrypoint 下，将 http3 的 advertisedPort 设置为 443</span>
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>entrypoints.websecure.http3.advertisedPort=443</span>
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web</span>
+</span></span><span style=display:flex><span>      - --<span style=color:#ae81ff>certificatesresolvers.myresolver.acme.storage=/etc/traefik/certs/acme.json</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>extra_hosts</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;host.docker.internal&#34;: </span><span style=color:#e6db74>&#34;172.18.0.1&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>labels</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>image</span>: <span style=color:#ae81ff>traefik:v3.0</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>ports</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>80</span>:<span style=color:#ae81ff>80</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>443</span>:<span style=color:#ae81ff>443</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 下面未注释的 1 行是新增的内容</span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e># 443 端口也要映射 UDP 协议</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>443</span>:<span style=color:#ae81ff>443</span><span style=color:#ae81ff>/udp</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>8080</span>:<span style=color:#ae81ff>8080</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>restart</span>: <span style=color:#ae81ff>unless-stopped</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>volumes</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>/var/run/docker.sock:/var/run/docker.sock</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>../../docker_config/traefik:/etc/traefik/config</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>../../docker_data/traefik/certs:/etc/traefik/certs</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>networks</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>default</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>driver</span>: <span style=color:#ae81ff>bridge</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>ipam</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>driver</span>: <span style=color:#ae81ff>default</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>config</span>:
+</span></span><span style=display:flex><span>        - <span style=color:#f92672>subnet</span>: <span style=color:#e6db74>&#34;172.18.0.0/24&#34;</span>
+</span></span></code></pre></div><div class=footnotes role=doc-endnotes><hr><ol><li id=fn:1><p>来源：<a href=https://doc.traefik.io/traefik/v3.0/providers/overview/#provider-namespace>Provider Namespace</a>。&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li></ol></div></div><div class=pagination><div class=pagination__title><span class=pagination__title-h>阅读其它文章</span><hr></div><div class=pagination__buttons><span class="button previous"><a href=https://blog.bling.moe/post/18/><span class=button__icon>←</span>
+<span class=button__text>关于 router.push() 会报错这件事</span></a></span>
+<span class="button next"><a href=https://blog.bling.moe/post/14/><span class=button__text>Docker 下的 Traefik 上手教程</span>
+<span class=button__icon>→</span></a></span></div></div><script src=https://giscus.app/client.js data-repo=HoshinoRei/blog data-repo-id=R_kgDOGZbNzw data-category=General data-category-id=DIC_kwDOGZbNz84CPgAu data-mapping=pathname data-reactions-enabled=1 data-emit-metadata=1 data-input-position=bottom data-theme=preferred_color_scheme data-lang=zh-CN data-loading=lazy crossorigin=anonymous async></script></article></div><footer class=footer><div class=footer__inner><a href=/ class=logo style=text-decoration:none><span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg></span><span class=logo__text>星野玲的博客</span>
+<span class=logo__cursor></span></a><div class=copyright><span>© 2025 Powered by <a href=https://gohugo.io target=_blank rel=noopener>Hugo</a></span>
+<span><a href=https://github.com/panr/hugo-theme-hello-friend target=_blank>Theme</a> made by <a href=https://github.com/panr target=_blank>panr</a></span></div></div></footer><script type=text/javascript src=/bundle.min.js></script></div><script async src="https://www.googletagmanager.com/gtag/js?id=G-E6TTBX28QL"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-E6TTBX28QL",{anonymize_ip:!1})}</script></body></html>
