@@ -5,4 +5,3 @@ description: 友情链接
 draft: false
 ---
 - [凛子的导标](https://blog.rinkko.moe/)
-- [Rikki's Blog](https://blog.rikki.moe/)
