@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/links.md",
+                "file": "content/post/1/index.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "links"
+              "title": "index"
             }
           }
         ]
@@ -104,7 +104,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/links.md",
+                "file": "content/post/1/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -114,7 +114,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for links"
+              "title": "Backlinks for index"
             }
           },
           {
@@ -123,12 +123,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "content/links.md",
+                "file": "content/post/1/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from links"
+              "title": "Outgoing links from index"
             }
           },
           {
@@ -152,13 +152,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/links.md",
+                "file": "content/post/1/index.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of links"
+              "title": "Outline of index"
             }
           }
         ],
@@ -181,18 +181,23 @@
   },
   "active": "0ef43cb9526be356",
   "lastOpenFiles": [
+    "content/post/2/index.md",
+    "content/post/3/index.md",
+    "content/post/5/index.md",
+    "content/post/6/index.md",
     "content/post/7/index.md",
-    "content/post/7/Snipaste_2022-08-08_18-25-11.png",
+    "content/post/8/index.md",
     "content/post/11/index.md",
     "content/post/12/index.md",
     "content/post/13/index.md",
     "content/post/14/index.md",
+    "content/post/20/index.md",
+    "content/post/20/Snipaste_2023-10-15_07-43-34.png",
+    "content/links.md",
+    "content/post/7/Snipaste_2022-08-08_18-25-11.png",
     "content/post/15/index.md",
     "content/post/18/index.md",
     "content/post/19/index.md",
-    "content/post/20/index.md",
-    "content/post/6/index.md",
-    "content/links.md",
     "config.yaml~",
     "content/about.md",
     "public/tags/nodejs/index.xml",
@@ -201,10 +206,6 @@
     "public/tags/nodejs/page",
     "public/tags/nodejs/index.html",
     "public/tags/nodejs",
-    "content/post/8/index.md",
-    "content/post/5/index.md",
-    "content/post/3/index.md",
-    "content/post/2/index.md",
     "content/post/1/index.md",
     "public/tags/windows11/index.xml",
     "public/tags/windows11/page/1/index.html",
@@ -216,7 +217,6 @@
     "public/post/6/Snipaste_2022-07-03_15-08-52.png",
     "public/post/6/Snipaste_2022-07-03_15-06-58.png",
     "public/post/6/Snipaste_2022-07-03_15-06-19.png",
-    "public/post/6/Snipaste_2022-07-03_15-04-39.png",
-    "public/post/6/Snipaste_2022-07-03_15-04-29.png"
+    "public/post/6/Snipaste_2022-07-03_15-04-39.png"
   ]
 }
